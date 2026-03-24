@@ -1,0 +1,561 @@
+{% comment %}
+  Farmer Profile Card Section
+  Displays farmer information with photo gallery, bio, certifications, and product context
+  Used: Homepage, farmer directory pages, product pages
+  Design: Card-based layout with farmer image, name, farm details, certifications, product count
+{% endcomment %}
+
+<section class="farmer-profile-card-wrapper section-wrapper" id="farmer-profile-{{ section.id }}">
+  <div class="farmer-profile-card">
+    {%- if section.settings.show_image -%}
+      <div class="farmer-profile-card__image-container">
+        <figure class="farmer-profile-card__image">
+          {%- if section.settings.farmer_image -%}
+            {%- if section.settings.enable_gallery -%}
+              <div class="farmer-profile-card__gallery">
+                {%- assign gallery_image_1 = section.settings.farmer_image -%}
+                {%- assign gallery_image_2 = section.settings.gallery_image_2 -%}
+                {%- assign gallery_image_3 = section.settings.gallery_image_3 -%}
+                
+                <img 
+                  src="{{ section.settings.farmer_image | image_url: width: 600 }}"
+                  alt="{{ section.settings.farmer_name }} from {{ section.settings.farm_name }}"
+                  loading="lazy"
+                  class="farmer-profile-card__img"
+                  width="600"
+                  height="600">
+              </div>
+            {%- else -%}
+              <img 
+                src="{{ section.settings.farmer_image | image_url: width: 600 }}"
+                alt="{{ section.settings.farmer_name }} from {{ section.settings.farm_name }}"
+                loading="lazy"
+                class="farmer-profile-card__img"
+                width="600"
+                height="600">
+            {%- endif -%}
+          {%- endif -%}
+        </figure>
+      </div>
+    {%- endif -%}
+
+    <div class="farmer-profile-card__content">
+      {%- if section.settings.show_farm_badge -%}
+        <div class="farmer-profile-card__badge">
+          <span class="badge badge--sm">Certified Farm Partner</span>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.farmer_name -%}
+        <h3 class="farmer-profile-card__farmer-name">{{ section.settings.farmer_name }}</h3>
+      {%- endif -%}
+
+      {%- if section.settings.farm_name -%}
+        <p class="farmer-profile-card__farm-name">{{ section.settings.farm_name }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.farm_location -%}
+        <p class="farmer-profile-card__location">
+          <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
+          </svg>
+          {{ section.settings.farm_location }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.farmer_bio -%}
+        <div class="farmer-profile-card__bio">
+          {{ section.settings.farmer_bio }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.show_certifications and block.settings.certifications -%}
+        <div class="farmer-profile-card__certifications">
+          <h4 class="farmer-profile-card__certifications-label">Certifications</h4>
+          <div class="farmer-profile-card__badges-grid">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'certification' -%}
+                <div class="certification-badge certification-badge--{{ block.settings.badge_type | downcase | replace: ' ', '-' }}">
+                  <span class="certification-badge__label">{{ block.settings.badge_label }}</span>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.product_count > 0 -%}
+        <div class="farmer-profile-card__stats">
+          <div class="stat">
+            <span class="stat__number">{{ section.settings.product_count }}</span>
+            <span class="stat__label">Products Available</span>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label -%}
+        <a href="{{ section.settings.button_link }}" class="button button--primary farmer-profile-card__cta">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.show_learn_more -%}
+        <a href="{{ section.settings.learn_more_link }}" class="button button--secondary farmer-profile-card__secondary-cta">
+          Learn More About {{ section.settings.farm_name | default: 'This Farm' }}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.show_social_links -%}
+        <div class="farmer-profile-card__social">
+          {%- if section.settings.social_instagram -%}
+            <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-link">
+              <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.057-1.645.069-4.849.069-3.204 0-3.584-.012-4.849-.069-3.259-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1112.324 0 6.162 6.162 0 01-12.324 0zM12 16a4 4 0 110-8 4 4 0 010 8zm4.965-10.322a1.44 1.44 0 110-2.881 1.44 1.44 0 010 2.88z" fill="currentColor"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_facebook -%}
+            <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener noreferrer" aria-label="Facebook" class="social-link">
+              <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if section.settings.social_website -%}
+            <a href="{{ section.settings.social_website }}" target="_blank" rel="noopener noreferrer" aria-label="Website" class="social-link">
+              <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm8.537 11.42h-5.677a7.988 7.988 0 00-.47-2.45h5.977c.33.816.52 1.71.52 2.65.027.06 0 .117-.35.117zm-11.68-2.45a7.89 7.89 0 01.47-2.45h4.27a7.89 7.89 0 01.47 2.45H8.857zm8.947-4.43H12.46a6.978 6.978 0 00-1.45-1.814 6.901 6.901 0 012.654 1.814zm-5.934 0a6.901 6.901 0 00-2.654-1.814A6.978 6.978 0 0111.54 4.54zm-3.204 1.98h-5.977c-.33-.816-.52-1.71-.52-2.65 0-.058.03-.116.35-.116h5.677c.33.816.52 1.71.52 2.65 0 .058-.03.116-.35.116zm11.21 2.53h-5.977a7.988 7.988 0 00-.47 2.45h6.327c.06-.816.12-1.538.12-2.45zm-13.68 2.45H3.44c-.06.816-.12 1.538-.12 2.45h5.977a7.988 7.988 0 01.47-2.45zM12 19.12a6.901 6.901 0 01-2.654-1.814h5.308A6.901 6.901 0 0112 19.12zm-5.09-1.814a6.978 6.978 0 00-1.45-1.814h3.504a6.978 6.978 0 01-2.054 1.814zm10.18-1.814a6.978 6.978 0 01-2.054-1.814h3.504a6.978 6.978 0 00-1.45 1.814z" fill="currentColor"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .farmer-profile-card-wrapper {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .farmer-profile-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+    background-color: var(--color-background);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(var(--color-farm-green), 0.15);
+    transition: var(--shadow-hover-transition);
+  }
+
+  .farmer-profile-card:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .farmer-profile-card__image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, rgba(var(--color-farm-green), 0.1), rgba(var(--color-heritage-red), 0.05));
+  }
+
+  .farmer-profile-card__image {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .farmer-profile-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .farmer-profile-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+  }
+
+  .farmer-profile-card__badge {
+    align-self: flex-start;
+  }
+
+  .farmer-profile-card__farmer-name {
+    font-size: 1.75rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .farmer-profile-card__farm-name {
+    font-size: 1.25rem;
+    color: var(--color-heritage-red);
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .farmer-profile-card__location {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+    margin: 0;
+  }
+
+  .farmer-profile-card__location .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    color: var(--color-farm-green);
+  }
+
+  .farmer-profile-card__bio {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    border-left: 3px solid var(--color-heritage-red);
+    padding-left: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    font-style: italic;
+  }
+
+  .farmer-profile-card__certifications {
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(var(--color-farm-green), 0.15);
+  }
+
+  .farmer-profile-card__certifications-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .farmer-profile-card__badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--spacing-sm);
+  }
+
+  .farmer-profile-card__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: rgba(var(--color-farm-green), 0.05);
+    border-radius: var(--radius-md);
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+
+  .stat__number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-heritage-red);
+    font-family: var(--font-display-serif);
+  }
+
+  .stat__label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .farmer-profile-card__cta {
+    align-self: flex-start;
+    margin-top: var(--spacing-sm);
+  }
+
+  .farmer-profile-card__secondary-cta {
+    align-self: flex-start;
+    margin-top: calc(var(--spacing-sm) * -0.5);
+  }
+
+  .farmer-profile-card__social {
+    display: flex;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(var(--color-farm-green), 0.15);
+  }
+
+  .social-link {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background-color: rgba(var(--color-farm-green), 0.1);
+    color: var(--color-farm-green);
+    transition: all var(--transition-default);
+    text-decoration: none;
+  }
+
+  .social-link:hover {
+    background-color: var(--color-heritage-red);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .social-link .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  /* Tablet layout */
+  @media (max-width: 768px) {
+    .farmer-profile-card {
+      grid-template-columns: 1fr;
+    }
+
+    .farmer-profile-card__image-container {
+      max-height: 400px;
+    }
+
+    .farmer-profile-card__farmer-name {
+      font-size: 1.5rem;
+    }
+
+    .farmer-profile-card__farm-name {
+      font-size: 1.125rem;
+    }
+
+    .farmer-profile-card__badges-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+  }
+
+  /* Mobile layout */
+  @media (max-width: 640px) {
+    .farmer-profile-card-wrapper {
+      padding: var(--spacing-md);
+    }
+
+    .farmer-profile-card__content {
+      padding: var(--spacing-md);
+      gap: var(--spacing-sm);
+    }
+
+    .farmer-profile-card__farmer-name {
+      font-size: 1.25rem;
+    }
+
+    .farmer-profile-card__farm-name {
+      font-size: 1rem;
+    }
+
+    .farmer-profile-card__bio {
+      font-size: 0.9375rem;
+    }
+
+    .farmer-profile-card__badges-grid {
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    }
+
+    .stat__number {
+      font-size: 1.5rem;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .farmer-profile-card,
+    .social-link {
+      transition: none;
+    }
+
+    .social-link:hover {
+      transform: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Farmer Profile Card",
+  "class": "farmer-profile-card-section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "farmer_image",
+      "label": "Farmer/Farm Image"
+    },
+    {
+      "type": "text",
+      "id": "farmer_name",
+      "label": "Farmer Name",
+      "default": "Juan de la Cruz"
+    },
+    {
+      "type": "text",
+      "id": "farm_name",
+      "label": "Farm Name",
+      "default": "Cruz Heritage Farm"
+    },
+    {
+      "type": "text",
+      "id": "farm_location",
+      "label": "Farm Location",
+      "default": "Cebu, Philippines"
+    },
+    {
+      "type": "richtext",
+      "id": "farmer_bio",
+      "label": "Farmer Bio",
+      "default": "<p>Fourth-generation heritage pork farmer dedicated to sustainable practices and animal welfare.</p>"
+    },
+    {
+      "type": "range",
+      "id": "product_count",
+      "label": "Number of Products",
+      "min": 0,
+      "max": 50,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "Show Farmer Image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_gallery",
+      "label": "Enable Multi-Image Gallery",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_2",
+      "label": "Gallery Image 2"
+    },
+    {
+      "type": "image_picker",
+      "id": "gallery_image_3",
+      "label": "Gallery Image 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_farm_badge",
+      "label": "Show 'Certified Farm Partner' Badge",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_certifications",
+      "label": "Show Certifications",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Primary Button Label",
+      "default": "Shop This Farm's Products"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_learn_more",
+      "label": "Show Learn More Button",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "learn_more_link",
+      "label": "Learn More Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_links",
+      "label": "Show Social Media Links",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_website",
+      "label": "Farm Website URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "certification",
+      "name": "Certification Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "badge_type",
+          "label": "Certification Type",
+          "default": "Heritage Breed",
+          "options": [
+            { "value": "Heritage Breed", "label": "Heritage Breed" },
+            { "value": "Pasture-Raised", "label": "Pasture-Raised" },
+            { "value": "Fair Trade", "label": "Fair Trade" },
+            { "value": "No Antibiotics", "label": "No Antibiotics" },
+            { "value": "Sustainable", "label": "Sustainable" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "badge_label",
+          "label": "Badge Label",
+          "default": "Heritage Breed Certified"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Farmer Profile Card",
+      "settings": {
+        "farmer_name": "Maria Santos",
+        "farm_name": "Santos Heritage Farm",
+        "farm_location": "Cebu, Mabolo",
+        "product_count": 8
+      },
+      "blocks": [
+        {
+          "type": "certification",
+          "settings": {
+            "badge_type": "Heritage Breed",
+            "badge_label": "Heritage Breed"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "badge_type": "Pasture-Raised",
+            "badge_label": "Pasture-Raised"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

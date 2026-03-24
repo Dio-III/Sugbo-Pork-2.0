@@ -1,0 +1,230 @@
+{% comment %}
+  Certification Badge Block Component
+  Displays reusable certification badges with SVG icons, labels, and hover details
+  Used within: farmer-profile-card.liquid, trust-signifiers.liquid, product cards
+  Design: Icons with labels, hover states reveal certification details
+{% endcomment %}
+
+<div class="certification-badge certification-badge--{{ section.settings.badge_type | downcase | replace: ' ', '-' }}" 
+     {% if section.settings.certification_details %}
+       data-tooltip="{{ section.settings.certification_details | escape }}"
+       aria-label="{{ section.settings.badge_label }} - {{ section.settings.certification_details | escape }}"
+     {% else %}
+       aria-label="{{ section.settings.badge_label }}"
+     {% endif %}>
+  
+  {%- if section.settings.use_svg_icon -%}
+    {%- case section.settings.badge_type -%}
+      {%- when 'Heritage Breed' -%}
+        <svg class="certification-badge__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M32 14L38 28h15l-12 9 5 14-12-9-12 9 5-14-12-9h15z" fill="currentColor"/>
+          <text x="32" y="50" text-anchor="middle" font-size="10" font-weight="bold" fill="currentColor">HERITAGE</text>
+        </svg>
+      {%- when 'Pasture-Raised' -%}
+        <svg class="certification-badge__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M20 42v8h24v-8M24 42v-6l8-8 8 8v6M32 20c-4 0-6 3-6 6 0 3 2 6 6 6 4 0 6-3 6-6 0-3-2-6-6-6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M28 44v-2m8 2v-2m-16 4h24" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      {%- when 'Fair Trade' -%}
+        <svg class="certification-badge__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="32" cy="32" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M32 12v40M12 32h40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M42 22l-20 20m20 0l-20-20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      {%- when 'No Antibiotics' -%}
+        <svg class="certification-badge__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="1.5"/>
+          <rect x="18" y="24" width="28" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M32 28v12M28 32h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18 42 L 46 42" stroke="currentColor" stroke-width="1"/>
+          <circle cx="32" cy="48" r="2" fill="currentColor"/>
+        </svg>
+      {%- when 'Sustainable' -%}
+        <svg class="certification-badge__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M32 14C22 14 14 22 14 32c0 10 8 18 18 18 5 0 10-2 14-5v-6c-3 2-6 3-10 3-7 0-13-5-13-12 0-7 6-12 13-12 4 0 7 1 10 3v-6c-4-3-9-5-14-5z" fill="currentColor" opacity="0.7"/>
+          <path d="M44 28L50 22L46 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      {%- else -%}
+        <svg class="certification-badge__icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="32" r="30" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M32 18L42 26v12c0 8-10 14-10 14s-10-6-10-14V26z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M28 32l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      {%- endcase -%}
+    </div>
+  {%- endif -%}
+  
+  <span class="certification-badge__label">{{ section.settings.badge_label }}</span>
+  
+  {%- if section.settings.show_icon_description -%}
+    <span class="certification-badge__description">{{ section.settings.badge_type }}</span>
+  {%- endif -%}
+</div>
+
+<style>
+  .certification-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    background-color: rgba(var(--color-farm-green), 0.05);
+    border: 1px solid rgba(var(--color-farm-green), 0.2);
+    transition: all var(--transition-default);
+    position: relative;
+    text-align: center;
+  }
+
+  .certification-badge:hover {
+    background-color: rgba(var(--color-heritage-red), 0.08);
+    border-color: var(--color-heritage-red);
+    transform: translateY(-2px);
+  }
+
+  .certification-badge__icon {
+    width: var(--spacing-xl);
+    height: var(--spacing-xl);
+    color: var(--color-heritage-red);
+    flex-shrink: 0;
+  }
+
+  .certification-badge--heritage-breed .certification-badge__icon {
+    color: var(--color-heritage-red);
+  }
+
+  .certification-badge--pasture-raised .certification-badge__icon {
+    color: var(--color-farm-green);
+  }
+
+  .certification-badge--fair-trade .certification-badge__icon {
+    color: #d4a574;
+  }
+
+  .certification-badge--no-antibiotics .certification-badge__icon {
+    color: var(--color-heritage-red);
+  }
+
+  .certification-badge--sustainable .certification-badge__icon {
+    color: var(--color-farm-green);
+  }
+
+  .certification-badge__label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.2;
+  }
+
+  .certification-badge__description {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
+  .certification-badge[data-tooltip] {
+    cursor: help;
+  }
+
+  /* Responsive spacing for certification badges in grids */
+  @media (max-width: 768px) {
+    .certification-badge {
+      padding: var(--spacing-xs);
+      gap: var(--spacing-2xs);
+    }
+
+    .certification-badge__icon {
+      width: calc(var(--spacing-xl) - 2px);
+      height: calc(var(--spacing-xl) - 2px);
+    }
+
+    .certification-badge__label {
+      font-size: 0.8125rem;
+    }
+
+    .certification-badge__description {
+      display: none;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .certification-badge {
+      transition: none;
+    }
+
+    .certification-badge:hover {
+      transform: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Certification Badge",
+  "class": "certification-badge-block",
+  "settings": [
+    {
+      "type": "select",
+      "id": "badge_type",
+      "label": "Certification Type",
+      "default": "Heritage Breed",
+      "options": [
+        { "value": "Heritage Breed", "label": "Heritage Breed" },
+        { "value": "Pasture-Raised", "label": "Pasture-Raised" },
+        { "value": "Fair Trade", "label": "Fair Trade" },
+        { "value": "No Antibiotics", "label": "No Antibiotics" },
+        { "value": "Sustainable", "label": "Sustainable" }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "badge_label",
+      "label": "Badge Label",
+      "default": "Heritage Breed Certified"
+    },
+    {
+      "type": "richtext",
+      "id": "certification_details",
+      "label": "Certification Details (Hover Tooltip)",
+      "default": "<p>Certified heritage breed raising standards</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_svg_icon",
+      "label": "Use Custom SVG Icon",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon_description",
+      "label": "Show Description Below Icon",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heritage Breed Badge",
+      "settings": {
+        "badge_type": "Heritage Breed",
+        "badge_label": "Heritage Breed Certified",
+        "certification_details": "<p>Raised according to heritage breed standards with focus on animal welfare and genetic diversity</p>",
+        "use_svg_icon": true
+      }
+    },
+    {
+      "name": "Pasture-Raised Badge",
+      "settings": {
+        "badge_type": "Pasture-Raised",
+        "badge_label": "Pasture-Raised",
+        "certification_details": "<p>Animals raised on pasture with access to outdoor grazing and natural feed</p>",
+        "use_svg_icon": true
+      }
+    }
+  ]
+}
+{% endschema %}

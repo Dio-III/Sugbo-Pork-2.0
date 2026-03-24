@@ -1,0 +1,518 @@
+{% comment %}
+  Agricultural Timeline Section
+  Displays farming practices, standards, and sustainability timeline
+  Used: About pages, farmer profiles, educational content
+  Design: Vertical or horizontal timeline with practice cards and certification markers
+{% endcomment %}
+
+<section class="agricultural-timeline-wrapper section-wrapper" id="agricultural-timeline-{{ section.id }}">
+  <div class="agricultural-timeline-container">
+    {%- if section.settings.show_header -%}
+      <div class="section-header">
+        {%- if section.settings.heading -%}
+          <h2 class="section-title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading -%}
+          <p class="section-subtitle">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="agricultural-timeline-items">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'timeline-item' -%}
+          <div class="timeline-item">
+            <div class="timeline-item__marker">
+              <div class="timeline-item__dot"></div>
+              {%- if block.settings.show_icon -%}
+                <svg class="timeline-item__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  {%- case block.settings.icon_type -%}
+                    {%- when 'seed' -%}
+                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                      <path d="M12 4v8M8 10c2 2 4 2 4 4M16 10c-2 2-4 2-4 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    {%- when 'growth' -%}
+                      <path d="M12 20v-8M8 8c0-2 1-4 4-4s4 2 4 4c0 2-1 3-2 4l-4 0c-1-1-2-2-2-4z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M6 16h12" stroke="currentColor" stroke-width="1.5"/>
+                    {%- when 'harvest' -%}
+                      <path d="M12 4l2 6h6l-5 4 2 6-6-4-6 4 2-6-5-4h6z" fill="currentColor" opacity="0.7"/>
+                    {%- when 'certification' -%}
+                      <path d="M12 2L15 8L21 9L16 14L17 20L12 17L7 20L8 14L3 9L9 8Z" fill="currentColor" opacity="0.7"/>
+                    {%- when 'community' -%}
+                      <circle cx="8" cy="9" r="2.5" fill="currentColor" opacity="0.7"/>
+                      <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity="0.7"/>
+                      <circle cx="12" cy="16" r="2.5" fill="currentColor" opacity="0.7"/>
+                      <path d="M10 11 L 14 11 M 12 11 L 12 14" stroke="currentColor" stroke-width="1.5"/>
+                    {%- else -%}
+                      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                      <path d="M12 6v12M6 12h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    {%- endcase -%}
+                </svg>
+              {%- endif -%}
+            </div>
+
+            <div class="timeline-item__content">
+              {%- if block.settings.time_period -%}
+                <span class="timeline-item__period">{{ block.settings.time_period }}</span>
+              {%- endif -%}
+
+              {%- if block.settings.title -%}
+                <h3 class="timeline-item__title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+
+              {%- if block.settings.description -%}
+                <p class="timeline-item__description">{{ block.settings.description }}</p>
+              {%- endif -%}
+
+              {%- if block.settings.show_practice_list and block.settings.practices -%}
+                <ul class="timeline-item__practices">
+                  {%- assign practices = block.settings.practices | split: ',' -%}
+                  {%- for practice in practices -%}
+                    <li class="timeline-item__practice">{{ practice | strip }}</li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+
+              {%- if block.settings.certification_badge_label -%}
+                <div class="timeline-item__badge">
+                  <span class="certification-badge">{{ block.settings.certification_badge_label }}</span>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_cta_section -%}
+      <div class="agricultural-timeline-cta">
+        {%- if section.settings.cta_heading -%}
+          <h3 class="timeline-cta__heading">{{ section.settings.cta_heading }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.cta_description -%}
+          <p class="timeline-cta__description">{{ section.settings.cta_description }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.cta_button_label and section.settings.cta_button_link -%}
+          <a href="{{ section.settings.cta_button_link }}" class="button button--primary">
+            {{ section.settings.cta_button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .agricultural-timeline-wrapper {
+    padding: var(--spacing-xl) var(--spacing-md);
+    background: linear-gradient(135deg, rgba(var(--color-farm-green), 0.03), rgba(var(--color-heritage-red), 0.02));
+  }
+
+  .agricultural-timeline-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+    line-height: 1.2;
+  }
+
+  .section-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .agricultural-timeline-items {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-lg) 0;
+  }
+
+  /* Vertical timeline line */
+  .agricultural-timeline-items::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--color-heritage-red), var(--color-farm-green));
+  }
+
+  .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-lg);
+    padding-left: var(--spacing-lg);
+  }
+
+  .timeline-item__marker {
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .timeline-item__dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    border: 3px solid var(--color-heritage-red);
+    position: absolute;
+    z-index: 1;
+  }
+
+  .timeline-item__icon {
+    width: 24px;
+    height: 24px;
+    color: var(--color-heritage-red);
+    position: relative;
+    z-index: 2;
+  }
+
+  .timeline-item__content {
+    background-color: white;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    border-left: 4px solid var(--color-heritage-red);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all var(--transition-default);
+  }
+
+  .timeline-item:hover .timeline-item__content {
+    box-shadow: var(--shadow-hover);
+    transform: translateX(4px);
+    border-left-color: var(--color-farm-green);
+  }
+
+  .timeline-item__period {
+    display: inline-block;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-heritage-red);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .timeline-item__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+
+  .timeline-item__description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .timeline-item__practices {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-md) 0;
+    display: grid;
+    gap: var(--spacing-xs);
+  }
+
+  .timeline-item__practice {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    padding-left: var(--spacing-md);
+    position: relative;
+  }
+
+  .timeline-item__practice::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--color-farm-green);
+    font-weight: 700;
+  }
+
+  .timeline-item__badge {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(var(--color-farm-green), 0.2);
+  }
+
+  .agricultural-timeline-cta {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-2xl);
+    background-color: rgba(var(--color-heritage-red), 0.05);
+    border-radius: var(--radius-lg);
+    border: 2px solid rgba(var(--color-heritage-red), 0.2);
+  }
+
+  .timeline-cta__heading {
+    font-size: 1.75rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .timeline-cta__description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg) auto;
+    line-height: 1.6;
+  }
+
+  /* Tablet layout */
+  @media (max-width: 768px) {
+    .agricultural-timeline-wrapper {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .timeline-item {
+      grid-template-columns: 1fr;
+      padding-left: var(--spacing-md);
+    }
+
+    .agricultural-timeline-items::before {
+      left: 6px;
+    }
+
+    .timeline-item__marker {
+      left: -4px;
+    }
+
+    .timeline-item__content {
+      padding: var(--spacing-md);
+    }
+  }
+
+  /* Mobile layout */
+  @media (max-width: 640px) {
+    .agricultural-timeline-wrapper {
+      padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+    }
+
+    .timeline-item__title {
+      font-size: 1.125rem;
+    }
+
+    .timeline-item__description {
+      font-size: 0.9375rem;
+    }
+
+    .agricultural-timeline-cta {
+      padding: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+    }
+
+    .timeline-cta__heading {
+      font-size: 1.5rem;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .timeline-item__content {
+      transition: none;
+    }
+
+    .timeline-item:hover .timeline-item__content {
+      transform: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Agricultural Timeline",
+  "class": "agricultural-timeline-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show Header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Our Farming Journey"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Section Subtitle",
+      "default": "<p>Understanding the practices and standards that define our heritage pork commitment</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta_section",
+      "label": "Show Call-to-Action Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "Learn About Our Standards"
+    },
+    {
+      "type": "richtext",
+      "id": "cta_description",
+      "label": "CTA Description",
+      "default": "<p>Discover how our farmers implement sustainable practices to bring you the highest quality heritage pork</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "CTA Button Label",
+      "default": "View Farmer Standards"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "CTA Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "timeline-item",
+      "name": "Timeline Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "time_period",
+          "label": "Time Period",
+          "default": "Year-Round"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Item Title",
+          "default": "Pasture Rotation"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Our farmers rotate pastures seasonally to ensure optimal animal wellness and land health</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_icon",
+          "label": "Show Icon",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "icon_type",
+          "label": "Icon Type",
+          "default": "growth",
+          "options": [
+            { "value": "seed", "label": "Seed/Planting" },
+            { "value": "growth", "label": "Growth" },
+            { "value": "harvest", "label": "Harvest" },
+            { "value": "certification", "label": "Certification" },
+            { "value": "community", "label": "Community" }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "show_practice_list",
+          "label": "Show Practice List",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "practices",
+          "label": "Practices (comma-separated)",
+          "default": "Rotational grazing, Water management, Soil health monitoring, Minimal intervention"
+        },
+        {
+          "type": "text",
+          "id": "certification_badge_label",
+          "label": "Certification Badge Label",
+          "default": ""
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Agricultural Timeline",
+      "settings": {
+        "heading": "Our Sustainable Farming Practices",
+        "subheading": "From pasture to plate, learn how we maintain the highest standards"
+      },
+      "blocks": [
+        {
+          "type": "timeline-item",
+          "settings": {
+            "time_period": "Spring",
+            "title": "Pasture Preparation",
+            "description": "Fields are prepared and animals transition to fresh pasture",
+            "icon_type": "seed",
+            "practices": "Cover crop management, Soil testing, Water infrastructure setup"
+          }
+        },
+        {
+          "type": "timeline-item",
+          "settings": {
+            "time_period": "Summer",
+            "title": "Growth & Grazing",
+            "description": "Animals graze on premium pasture during peak season",
+            "icon_type": "growth",
+            "practices": "Daily monitoring, Rotational grazing, Predator management"
+          }
+        },
+        {
+          "type": "timeline-item",
+          "settings": {
+            "time_period": "Fall",
+            "title": "Health Assessment",
+            "description": "Comprehensive health checks and market readiness evaluation",
+            "icon_type": "certification",
+            "practices": "Veterinary inspection, Quality grading, Certification verification"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

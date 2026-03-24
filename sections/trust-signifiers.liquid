@@ -1,0 +1,709 @@
+{% comment %}
+  Trust Signifiers Section
+  Displays aggregate certifications, farmer count, supply chain transparency metrics
+  Used: Homepage, about pages, trust-building sections
+  Design: Stats grid with icons, certifications, impact metrics, supply chain transparency
+{% endcomment %}
+
+<section class="trust-signifiers-wrapper section-wrapper" id="trust-signifiers-{{ section.id }}">
+  <div class="trust-signifiers-container">
+    {%- if section.settings.show_header -%}
+      <div class="section-header">
+        {%- if section.settings.heading -%}
+          <h2 class="section-title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading -%}
+          <p class="section-subtitle">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="trust-signifiers-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'stat' -%}
+            <div class="trust-signifier trust-signifier--{{ block.settings.signifier_type | downcase | replace: ' ', '-' }}">
+              <div class="trust-signifier__icon">
+                {%- case block.settings.signifier_type -%}
+                  {%- when 'Certified Farms' -%}
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M32 8L16 16v14c0 16 16 24 16 24s16-8 16-24V16L32 8z" fill="currentColor" opacity="0.7"/>
+                      <path d="M32 14L20 20v10c0 12 12 18 12 18s12-6 12-18V20L32 14z" fill="currentColor"/>
+                    </svg>
+                  {%- when 'Heritage Breed' -%}
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="32" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+                      <path d="M32 14v8M32 42v8M18 32h-8M44 32h8M22 22l-5.66-5.66M47.66 47.66l-5.66-5.66M22 42l-5.66 5.66M47.66 16.34l-5.66 5.66" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  {%- when 'Fair Trade' -%}
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="32" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+                      <path d="M32 14v36M18 32h28M24 20l16 24M24 44l16-24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- when 'Sustainability' -%}
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                      <ellipse cx="32" cy="40" rx="20" ry="4" fill="currentColor" opacity="0.3"/>
+                      <path d="M32 12c-8 0-12 6-12 12c0 6 4 10 12 14c8-4 12-8 12-14c0-6-4-12-12-12z" fill="currentColor" opacity="0.7"/>
+                      <path d="M32 20c-3 0-5 2-5 4c0 2 2 3 5 5c3-2 5-3 5-5c0-2-2-4-5-4z" fill="currentColor"/>
+                    </svg>
+                  {%- when 'Animal Welfare' -%}
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="16" cy="20" r="4" fill="currentColor"/>
+                      <circle cx="32" cy="20" r="4" fill="currentColor"/>
+                      <circle cx="48" cy="20" r="4" fill="currentColor"/>
+                      <path d="M14 30c0-3 3-5 8-5h6c5 0 8 2 8 5v10c0 5-2 8-8 8h-6c-6 0-8-3-8-8V30z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M32 30c0-3 3-5 8-5h6c5 0 8 2 8 5v10c0 5-2 8-8 8h-6c-6 0-8-3-8-8V30z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- else -%}
+                    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="32" cy="32" r="28" fill="currentColor" opacity="0.1" stroke="currentColor" stroke-width="2"/>
+                      <path d="M42 22L28 36L20 28" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  {%- endcase -%}
+                </svg>
+              </div>
+
+              <div class="trust-signifier__content">
+                {%- if block.settings.stat_number -%}
+                  <div class="trust-signifier__stat">
+                    <span class="trust-signifier__number">{{ block.settings.stat_number }}</span>
+                    {%- if block.settings.stat_suffix -%}
+                      <span class="trust-signifier__suffix">{{ block.settings.stat_suffix }}</span>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.stat_label -%}
+                  <p class="trust-signifier__label">{{ block.settings.stat_label }}</p>
+                {%- endif -%}
+
+                {%- if block.settings.stat_description -%}
+                  <p class="trust-signifier__description">{{ block.settings.stat_description }}</p>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_certifications_list -%}
+      <div class="trust-certifications-section">
+        <h3 class="trust-certifications__heading">{{ section.settings.certifications_heading }}</h3>
+        <div class="trust-certifications-list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'certification' -%}
+              <div class="certification-item">
+                <svg class="certification-item__checkmark" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                </svg>
+                <span class="certification-item__text">{{ block.settings.certification_name }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_supply_chain_info -%}
+      <div class="supply-chain-info">
+        <div class="supply-chain-info__header">
+          <svg class="supply-chain-info__icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+          </svg>
+          <h3 class="supply-chain-info__title">Supply Chain Transparency</h3>
+        </div>
+
+        <ul class="supply-chain-info__list">
+          <li class="supply-chain-info__item">
+            <span class="supply-chain-info__step">Farm Level</span>
+            <span class="supply-chain-info__detail">100% traceable to certified heritage farms</span>
+          </li>
+          <li class="supply-chain-info__item">
+            <span class="supply-chain-info__step">Processing</span>
+            <span class="supply-chain-info__detail">Partner processors maintaining animal welfare standards</span>
+          </li>
+          <li class="supply-chain-info__item">
+            <span class="supply-chain-info__step">Distribution</span>
+            <span class="supply-chain-info__detail">Cold chain management ensures optimal quality</span>
+          </li>
+          <li class="supply-chain-info__item">
+            <span class="supply-chain-info__step">Your Table</span>
+            <span class="supply-chain-info__detail">Complete product history and farmer information included</span>
+          </li>
+        </ul>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_cta -%}
+      <div class="trust-signifiers-cta">
+        {%- if section.settings.cta_heading -%}
+          <h3 class="trust-signifiers-cta__heading">{{ section.settings.cta_heading }}</h3>
+        {%- endif -%}
+
+        {%- if section.settings.cta_description -%}
+          <p class="trust-signifiers-cta__description">{{ section.settings.cta_description }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.cta_button_label and section.settings.cta_button_link -%}
+          <a href="{{ section.settings.cta_button_link }}" class="button button--primary">
+            {{ section.settings.cta_button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .trust-signifiers-wrapper {
+    padding: var(--spacing-xl) var(--spacing-md);
+    background: linear-gradient(135deg, rgba(var(--color-heritage-red), 0.02), rgba(var(--color-farm-green), 0.02));
+  }
+
+  .trust-signifiers-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+    line-height: 1.2;
+  }
+
+  .section-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .trust-signifiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .trust-signifier {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: flex-start;
+    border: 1px solid rgba(var(--color-farm-green), 0.15);
+    transition: all var(--transition-default);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .trust-signifier:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-heritage-red);
+    transform: translateY(-2px);
+  }
+
+  .trust-signifier__icon {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(var(--color-heritage-red), 0.1);
+    border-radius: var(--radius-md);
+    color: var(--color-heritage-red);
+  }
+
+  .trust-signifier--heritage-breed .trust-signifier__icon {
+    background-color: rgba(var(--color-heritage-red), 0.1);
+    color: var(--color-heritage-red);
+  }
+
+  .trust-signifier--fair-trade .trust-signifier__icon {
+    background-color: rgba(#d4a574, 0.1);
+    color: #d4a574;
+  }
+
+  .trust-signifier--sustainability .trust-signifier__icon {
+    background-color: rgba(var(--color-farm-green), 0.1);
+    color: var(--color-farm-green);
+  }
+
+  .trust-signifier--animal-welfare .trust-signifier__icon {
+    background-color: rgba(var(--color-farm-green), 0.1);
+    color: var(--color-farm-green);
+  }
+
+  .trust-signifier__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .trust-signifier__content {
+    flex: 1;
+  }
+
+  .trust-signifier__stat {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .trust-signifier__number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: var(--font-display-serif);
+    color: var(--color-heritage-red);
+    line-height: 1;
+  }
+
+  .trust-signifier__suffix {
+    font-size: 1.125rem;
+    color: var(--color-heritage-red);
+    font-weight: 600;
+  }
+
+  .trust-signifier__label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+  }
+
+  .trust-signifier__description {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Certifications List */
+  .trust-certifications-section {
+    margin: var(--spacing-2xl) 0;
+    padding: var(--spacing-lg);
+    background-color: rgba(var(--color-farm-green), 0.05);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(var(--color-farm-green), 0.2);
+  }
+
+  .trust-certifications__heading {
+    font-size: 1.5rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+
+  .trust-certifications-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+  }
+
+  .certification-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background-color: white;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(var(--color-farm-green), 0.15);
+  }
+
+  .certification-item__checkmark {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    color: var(--color-farm-green);
+    flex-shrink: 0;
+  }
+
+  .certification-item__text {
+    font-size: 0.9375rem;
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  /* Supply Chain Info */
+  .supply-chain-info {
+    margin: var(--spacing-2xl) 0;
+    padding: var(--spacing-lg);
+    background: linear-gradient(135deg, rgba(var(--color-farm-green), 0.08), rgba(var(--color-cream-hex), 0.3));
+    border-radius: var(--radius-lg);
+    border: 2px solid rgba(var(--color-farm-green), 0.2);
+  }
+
+  .supply-chain-info__header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .supply-chain-info__icon {
+    width: 40px;
+    height: 40px;
+    color: var(--color-heritage-red);
+  }
+
+  .supply-chain-info__title {
+    font-size: 1.5rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .supply-chain-info__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--spacing-md);
+  }
+
+  .supply-chain-info__item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--color-heritage-red);
+  }
+
+  .supply-chain-info__step {
+    font-weight: 700;
+    color: var(--color-heritage-red);
+    font-size: 0.9375rem;
+  }
+
+  .supply-chain-info__detail {
+    color: var(--color-text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  /* Call-to-Action */
+  .trust-signifiers-cta {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-2xl);
+    background-color: rgba(var(--color-heritage-red), 0.08);
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-heritage-red);
+  }
+
+  .trust-signifiers-cta__heading {
+    font-size: 1.75rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+  }
+
+  .trust-signifiers-cta__description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg) auto;
+    line-height: 1.6;
+  }
+
+  /* Tablet layout */
+  @media (max-width: 768px) {
+    .trust-signifiers-wrapper {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .trust-signifiers-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .trust-signifier {
+      padding: var(--spacing-md);
+      gap: var(--spacing-md);
+    }
+
+    .trust-signifier__icon {
+      width: 50px;
+      height: 50px;
+      min-width: 50px;
+    }
+
+    .trust-signifier__number {
+      font-size: 2rem;
+    }
+
+    .trust-certifications-list {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+  }
+
+  /* Mobile layout */
+  @media (max-width: 640px) {
+    .trust-signifiers-wrapper {
+      padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .trust-signifiers-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .trust-signifier {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .trust-signifier__icon {
+      width: 50px;
+      height: 50px;
+    }
+
+    .trust-signifier__number {
+      font-size: 1.75rem;
+    }
+
+    .trust-certifications-list {
+      grid-template-columns: 1fr;
+    }
+
+    .certification-item {
+      justify-content: center;
+    }
+
+    .supply-chain-info__header {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .trust-signifiers-cta {
+      padding: var(--spacing-lg);
+    }
+
+    .trust-signifiers-cta__heading {
+      font-size: 1.25rem;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .trust-signifier {
+      transition: none;
+    }
+
+    .trust-signifier:hover {
+      transform: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Trust Signifiers",
+  "class": "trust-signifiers-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show Section Header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Why Trust Sugbo Pork"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Section Subtitle",
+      "default": "<p>Built on a foundation of certifications, farmer partnerships, and transparent supply chains</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_certifications_list",
+      "label": "Show Certifications List",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "certifications_heading",
+      "label": "Certifications Heading",
+      "default": "Our Certifications & Standards"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_supply_chain_info",
+      "label": "Show Supply Chain Information",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show Call-to-Action",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "cta_heading",
+      "label": "CTA Heading",
+      "default": "Ready to Experience Heritage Pork Excellence?"
+    },
+    {
+      "type": "richtext",
+      "id": "cta_description",
+      "label": "CTA Description",
+      "default": "<p>Join hundreds of families who are supporting certified local farmers and enjoying the finest heritage pork</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "CTA Button Label",
+      "default": "Shop Heritage Pork"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "CTA Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Trust Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "stat_number",
+          "label": "Stat Number",
+          "default": "12"
+        },
+        {
+          "type": "text",
+          "id": "stat_suffix",
+          "label": "Stat Suffix",
+          "default": "Certified Farms"
+        },
+        {
+          "type": "text",
+          "id": "stat_label",
+          "label": "Stat Label",
+          "default": "Partner Farms"
+        },
+        {
+          "type": "richtext",
+          "id": "stat_description",
+          "label": "Stat Description",
+          "default": "<p>All meeting our heritage breed and ethical farming standards</p>"
+        },
+        {
+          "type": "select",
+          "id": "signifier_type",
+          "label": "Signifier Type",
+          "default": "Certified Farms",
+          "options": [
+            { "value": "Certified Farms", "label": "Certified Farms" },
+            { "value": "Heritage Breed", "label": "Heritage Breed" },
+            { "value": "Fair Trade", "label": "Fair Trade" },
+            { "value": "Sustainability", "label": "Sustainability" },
+            { "value": "Animal Welfare", "label": "Animal Welfare" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "certification",
+      "name": "Certification Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "certification_name",
+          "label": "Certification Name",
+          "default": "Heritage Breed Certified"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust Signifiers",
+      "settings": {
+        "heading": "Why Trust Sugbo Pork",
+        "subheading": "We're built on a foundation of certifications, farmer partnerships, and transparent supply chains"
+      },
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "12",
+            "stat_suffix": "",
+            "stat_label": "Certified Farms",
+            "stat_description": "All meeting our heritage breed and ethical farming standards",
+            "signifier_type": "Certified Farms"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "100%",
+            "stat_suffix": "",
+            "stat_label": "Pasture-Raised",
+            "stat_description": "All animals raised on pasture with outdoor access",
+            "signifier_type": "Animal Welfare"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "stat_number": "Zero",
+            "stat_suffix": "Antibiotics",
+            "stat_label": "Antibiotic-Free",
+            "stat_description": "No growth promoters or unnecessary medications",
+            "signifier_type": "Sustainability"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "certification_name": "Heritage Breed Preservation"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "certification_name": "Fair Trade Farmer Practices"
+          }
+        },
+        {
+          "type": "certification",
+          "settings": {
+            "certification_name": "Animal Welfare Certified"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

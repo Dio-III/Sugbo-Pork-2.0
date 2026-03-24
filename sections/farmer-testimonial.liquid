@@ -1,0 +1,614 @@
+{% comment %}
+  Farmer Testimonial Section
+  Displays farmer quotes, stories, and video testimonials
+  Used: Homepage, about pages, social proof sections
+  Design: Testimonial cards with farmer photo, quote, name, farm, and optional video
+{% endcomment %}
+
+<section class="farmer-testimonial-wrapper section-wrapper" id="farmer-testimonial-{{ section.id }}">
+  <div class="farmer-testimonial-container">
+    {%- if section.settings.show_header -%}
+      <div class="section-header">
+        {%- if section.settings.heading -%}
+          <h2 class="section-title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading -%}
+          <p class="section-subtitle">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="testimonials-grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'testimonial' -%}
+          <div class="testimonial-card" data-testimonial="{{ forloop.index }}">
+            <div class="testimonial-card__inner">
+              {%- if block.settings.show_quote_mark -%}
+                <div class="testimonial-card__quote-mark">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 21c3 0 7-1 7-8V5c0-1.25-4.716-5-7-5m0 0C3 3 0 8 0 13s0 6 3 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.testimonial_text -%}
+                <p class="testimonial-card__quote">{{ block.settings.testimonial_text }}</p>
+              {%- endif -%}
+
+              <div class="testimonial-card__author">
+                {%- if block.settings.author_image -%}
+                  <img 
+                    src="{{ block.settings.author_image | image_url: width: 80 }}"
+                    alt="{{ block.settings.author_name }}"
+                    loading="lazy"
+                    class="testimonial-card__author-image"
+                    width="80"
+                    height="80">
+                {%- endif -%}
+
+                <div class="testimonial-card__author-info">
+                  {%- if block.settings.author_name -%}
+                    <p class="testimonial-card__author-name">{{ block.settings.author_name }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.farm_name -%}
+                    <p class="testimonial-card__farm-name">{{ block.settings.farm_name }}</p>
+                  {%- endif -%}
+
+                  {%- if block.settings.author_title -%}
+                    <p class="testimonial-card__author-title">{{ block.settings.author_title }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+
+              {%- if block.settings.show_rating and block.settings.rating > 0 -%}
+                <div class="testimonial-card__rating">
+                  {%- for i in (1..block.settings.rating) -%}
+                    <svg class="star" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>
+                    </svg>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.show_video_testimonials -%}
+      <div class="video-testimonials-section">
+        <h3 class="video-testimonials-heading">{{ section.settings.video_section_heading }}</h3>
+
+        <div class="video-testimonials-grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'video-testimonial' and block.settings.video_url -%}
+              <div class="video-testimonial-card">
+                <div class="video-testimonial-card__wrapper">
+                  <iframe 
+                    src="{{ block.settings.video_url | replace: 'watch?v=', 'embed/' }}"
+                    title="{{ block.settings.farmer_name }} - {{ block.settings.video_title }}"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    class="video-testimonial-card__video">
+                  </iframe>
+
+                  <div class="video-testimonial-card__info">
+                    {%- if block.settings.video_title -%}
+                      <h4 class="video-testimonial-card__title">{{ block.settings.video_title }}</h4>
+                    {%- endif -%}
+
+                    {%- if block.settings.farmer_name -%}
+                      <p class="video-testimonial-card__farmer">{{ block.settings.farmer_name }}</p>
+                    {%- endif -%}
+
+                    {%- if block.settings.farm_name -%}
+                      <p class="video-testimonial-card__farm">{{ block.settings.farm_name }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.show_cta -%}
+      <div class="testimonials-cta">
+        {%- if section.settings.cta_text -%}
+          <p class="testimonials-cta__text">{{ section.settings.cta_text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.cta_button_label and section.settings.cta_button_link -%}
+          <a href="{{ section.settings.cta_button_link }}" class="button button--primary">
+            {{ section.settings.cta_button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  .farmer-testimonial-wrapper {
+    padding: var(--spacing-xl) var(--spacing-md);
+    background: linear-gradient(135deg, rgba(var(--color-farm-green), 0.02), rgba(var(--color-cream-hex), 0.5));
+  }
+
+  .farmer-testimonial-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    margin: 0 0 var(--spacing-md) 0;
+    line-height: 1.2;
+  }
+
+  .section-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .testimonial-card {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    border: 1px solid rgba(var(--color-farm-green), 0.15);
+    position: relative;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all var(--transition-default);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-heritage-red);
+  }
+
+  .testimonial-card__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    height: 100%;
+  }
+
+  .testimonial-card__quote-mark {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(var(--color-heritage-red), 0.2);
+  }
+
+  .testimonial-card__quote-mark svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .testimonial-card__quote {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .testimonial-card__author {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(var(--color-farm-green), 0.15);
+    margin-top: auto;
+  }
+
+  .testimonial-card__author-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--color-heritage-red);
+    flex-shrink: 0;
+  }
+
+  .testimonial-card__author-info {
+    flex-grow: 1;
+  }
+
+  .testimonial-card__author-name {
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .testimonial-card__farm-name {
+    color: var(--color-heritage-red);
+    font-weight: 600;
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9375rem;
+  }
+
+  .testimonial-card__author-title {
+    color: var(--color-text-secondary);
+    font-size: 0.8125rem;
+    margin: 0.25rem 0 0 0;
+    font-style: italic;
+  }
+
+  .testimonial-card__rating {
+    display: flex;
+    gap: var(--spacing-xs);
+  }
+
+  .testimonial-card__rating .star {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-heritage-red);
+  }
+
+  /* Video Testimonials Section */
+  .video-testimonials-section {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-2xl);
+    border-top: 2px solid rgba(var(--color-farm-green), 0.2);
+  }
+
+  .video-testimonials-heading {
+    font-size: 1.75rem;
+    font-family: var(--font-display-serif);
+    color: var(--color-text-primary);
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 var(--spacing-lg) 0;
+  }
+
+  .video-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: var(--spacing-lg);
+  }
+
+  .video-testimonial-card {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(var(--color-farm-green), 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: all var(--transition-default);
+  }
+
+  .video-testimonial-card:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  .video-testimonial-card__wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .video-testimonial-card__video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .video-testimonial-card__info {
+    padding: var(--spacing-lg);
+  }
+
+  .video-testimonial-card__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin: 0 0 var(--spacing-xs) 0;
+  }
+
+  .video-testimonial-card__farmer {
+    color: var(--color-heritage-red);
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .video-testimonial-card__farm {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  /* Call-to-Action */
+  .testimonials-cta {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+    padding: var(--spacing-2xl);
+    background: linear-gradient(135deg, rgba(var(--color-heritage-red), 0.08), rgba(var(--color-farm-green), 0.08));
+    border-radius: var(--radius-lg);
+    border: 2px solid rgba(var(--color-heritage-red), 0.2);
+  }
+
+  .testimonials-cta__text {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 var(--spacing-lg) 0;
+    line-height: 1.6;
+  }
+
+  /* Tablet layout */
+  @media (max-width: 768px) {
+    .farmer-testimonial-wrapper {
+      padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .testimonials-grid {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .video-testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Mobile layout */
+  @media (max-width: 640px) {
+    .farmer-testimonial-wrapper {
+      padding: var(--spacing-lg) var(--spacing-sm);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+    }
+
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+
+    .testimonial-card {
+      padding: var(--spacing-md);
+    }
+
+    .testimonial-card__author {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .testimonial-card__author-image {
+      width: 60px;
+      height: 60px;
+    }
+
+    .video-testimonials-heading {
+      font-size: 1.25rem;
+    }
+
+    .testimonials-cta {
+      padding: var(--spacing-lg);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .testimonial-card,
+    .video-testimonial-card {
+      transition: none;
+    }
+
+    .testimonial-card:hover {
+      transform: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Farmer Testimonials",
+  "class": "farmer-testimonial-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show Section Header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "What Our Farmers Say"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Section Subtitle",
+      "default": "<p>Hear directly from the farmers who are committed to heritage pork excellence</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_video_testimonials",
+      "label": "Show Video Testimonials Section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "video_section_heading",
+      "label": "Video Section Heading",
+      "default": "Meet Our Farmers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cta",
+      "label": "Show Call-to-Action",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "<p>Ready to support heritage pork farmers and try our products?</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_button_label",
+      "label": "CTA Button Label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_link",
+      "label": "CTA Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "testimonial_text",
+          "label": "Testimonial Quote",
+          "default": "Working with Sugbo Pork has been transformative for our farm. Their commitment to heritage breeds and farmer wellness is inspiring."
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Farmer Name",
+          "default": "Juan de la Cruz"
+        },
+        {
+          "type": "text",
+          "id": "farm_name",
+          "label": "Farm Name",
+          "default": "Cruz Heritage Farm"
+        },
+        {
+          "type": "text",
+          "id": "author_title",
+          "label": "Author Title",
+          "default": "Farm Owner"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Farmer Photo"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_quote_mark",
+          "label": "Show Quote Mark Icon",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_rating",
+          "label": "Show Star Rating",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star Rating",
+          "min": 0,
+          "max": 5,
+          "default": 5
+        }
+      ]
+    },
+    {
+      "type": "video-testimonial",
+      "name": "Video Testimonial",
+      "settings": [
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "label": "Video URL",
+          "accept": ["youtube", "vimeo"]
+        },
+        {
+          "type": "text",
+          "id": "video_title",
+          "label": "Video Title",
+          "default": "Farm Tour & Practices"
+        },
+        {
+          "type": "text",
+          "id": "farmer_name",
+          "label": "Farmer Name",
+          "default": "Juan de la Cruz"
+        },
+        {
+          "type": "text",
+          "id": "farm_name",
+          "label": "Farm Name",
+          "default": "Cruz Heritage Farm"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Farmer Testimonials",
+      "settings": {
+        "heading": "Hear From Our Farmers",
+        "subheading": "Real stories from the people behind your heritage pork"
+      },
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "Sugbo Pork's commitment to heritage breeds and sustainable farming has allowed us to grow while maintaining our values.",
+            "author_name": "Maria Santos",
+            "farm_name": "Santos Heritage Farm",
+            "author_title": "Third-Generation Farmer"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "testimonial_text": "The support and fair pricing model ensures our family farm remains viable for the next generation.",
+            "author_name": "Pedro Reyes",
+            "farm_name": "Reyes Family Pastures",
+            "author_title": "Farm Manager"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
